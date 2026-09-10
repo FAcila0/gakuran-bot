@@ -1,3 +1,19 @@
+from flask import Flask
+from threading import Thread
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot aktif ve çalışıyor!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
 import discord
 from discord.ext import commands
 from discord import ui
@@ -87,5 +103,9 @@ async def kayitkur(ctx):
     await ctx.send("Gakuran sunucusuna kayıt olmak için aşağıdaki butona tıklayabilirsin!", view=KayitButonu())
 
 import os
+
+# Web sunucusunu başlat (Render'ın port hatasını önlemek için)
+keep_alive()
+
 # Botu Çalıştır (Token'ı çevre değişkeninden alır)
 bot.run(os.getenv("DISCORD_TOKEN"))
